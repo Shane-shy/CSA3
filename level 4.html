@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>level 4</title>
+</head>
+
+<body>
+    <script>
+        // 对象深拷贝
+        let data = {
+                age: 18,
+                name: "liuruchao",
+                education: ["小学", "初中", "高中", "大学", undefined, null],
+                likesFood: new Set(["fish", "banana"]), // 相当于this.likesFood = new Set(["fish", "banana"]);
+                friends: [{
+                    name: "summer",
+                    sex: "woman"
+                }, {
+                    name: "daWen",
+                    sex: "woman"
+                }, {
+                    name: "yang",
+                    sex: "man"
+                }],
+                work: {
+                    time: "2019",
+                    project: {
+                        name: "test",
+                        obtain: ["css", "html", "js"]
+                    }
+                },
+                play: function() {
+                    console.log("玩滑板");
+                }
+            }
+            //     // 方法一：递归
+            // let newData = {};
+            // //判断数据类型的顺序是：数组，构造函数，普通对象，简单数据类型。因为js世界万物皆对象，所以一来就判断对象的话，永远都是true
+            // function deepCopy(newData, data) {
+            //     for (let k in data) {
+            //         let item = data[k]; //获取data里的元素
+            //         if (item instanceof Array) { //待测对象 instanceof 数据类型，用来判断该待测对象是否为此数据类型
+            //             newData[k] = [];
+            //             deepCopy(newData[k], item);
+            //         } else if (item instanceof Set) { //为什么直接赋值就可以了？因为Set是构造函数，构造函数创建的每个实例都是在独立的内存里，互不干扰
+            //             newData[k] = data[k];
+            //         } else if (item instanceof Object) {
+            //             newData[k] = {};
+            //             deepCopy(newData[k], item);
+            //         } else { //为简单数据类型的话，就可以直接赋值了
+            //             newData[k] = item;
+            //         }
+            //     }
+            //     return newData;
+            // }
+            // let result = deepCopy(newData, data);
+            // console.log(result);
+            // // //以下为检测是否为深拷贝部分，若更改了result内的属性，不影响data内的属性，则为深拷贝。
+            // // result.age = {};
+            // // result.name = {};
+            // // result.education = {};
+            // // result.likesFood = {};
+            // // result.friends = {};
+            // // result.work = {};
+            // // result.play = {};
+            // console.log(data);
+
+
+        //方法二：利用JSON
+
+        let obj = JSON.parse(JSON.stringify(data));
+        let temp;
+        let fn; //用于找到Set构造函数
+        for (let k in data) {
+            if (data[k] instanceof Set) {
+                temp = data[k];
+                fn = k;
+            }
+        }
+        //思路：对于JSON不能拷贝的东西，手动再拷贝一次。
+        for (let k in obj) {
+            if (obj[k] instanceof Array) {
+                obj[k] = data[k];
+            } else if (k == fn) {
+                obj[k] = temp;
+            }
+        }
+        console.log(obj);
+        // 以下用于检测方法二是否为深度拷贝
+        // obj.age = {};
+        // obj.name = {};
+        // obj.education = {};
+        // obj.likesFood = {};
+        // obj.friends = {};
+        // obj.work = {};
+        // obj.play = {};
+        console.log(data);
+    </script>
+</body>
+
+</html>

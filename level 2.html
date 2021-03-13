@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>level 2</title>
+</head>
+
+<body>
+    <script>
+        let arr = [1, [2, [3, [4, 5]]], 6];
+        //    方法一：直接无限扁平化
+        function even1(arr) {
+            console.log(arr.flat(Infinity));
+        }
+        even1(arr);
+        // 方法二： 迭代思路
+
+
+        function even2(arr) {
+            let newArr = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (Array.isArray(arr[i])) {
+                    even2(arr[i]);
+                } else {
+                    newArr.push(arr[i]);
+                }
+            }
+            return newArr;
+        }
+        console.log(even2(arr));
+
+
+
+
+        //   方法三：转换为字符串
+        let arr1 = [1, [2, [3, [4, 5]]], 6];
+
+        function even1(arr1) {
+            var arr2 = arr1.toString().split(','); //这样的返回值是字符串['1','2','3','4','5','6']
+            var arr3 = [];
+            for (var i = 0; i < arr2.length; i++) {
+                arr3.push(Number(arr2[i])); //将字符串类型强制转换为数字类型
+            }
+            return arr3;
+        }
+        console.log(even1(arr1));
+    </script>
+</body>
+
+</html>

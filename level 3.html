@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>level 3</title>
+</head>
+
+<body>
+    <script>
+        //检测作业时，请将其他方法注释
+        // 方法一：利用原型和原型链继承
+        // 构造函数
+        let Animal = function() {
+                this.species = "动物";
+            }
+            // Animal.species = "动物";
+        let Cat = function(name, color) {
+            this.name = name;
+            this.color = color;
+        }
+
+        // 创建实例
+        Cat.prototype = new Animal();
+        //  Cat.prototype = Animal;
+
+        //为什么这里会new一下？
+        // 原因如下：  因为Animal里面是this添加的属性， 所以是实例成员， 只有实例化的对象来访问。
+        //通过Animal.species = "动物" 点加属性名的方式添加的属性为静态成员，只能由构造函数本身来访问
+
+        let cat1 = new Cat("大毛", "黄色");
+        console.log(cat1.species);
+
+
+
+        // 方法二：拷贝
+        function Animal() {
+            this.species = "动物";
+        }
+
+        function Cat(name, color) {
+            this.name = name;
+            this.color = color;
+        }
+        let cat1 = new Cat("大毛", "黄色"); //这样，cat1是一个实例，因为是this添加的属性，只有实例化的对象才能访问
+        let animal = new Animal(); //同上
+        for (let k in animal) {
+            cat1[k] = animal[k];
+        }
+        console.log(cat1.species);
+
+
+
+        // 方法三：通过apply改变this的指向
+        let Animal = function() {
+
+            this.species = "动物";
+        }
+        let Cat = function(name, color) {
+
+            this.name = name;
+            this.color = color;
+        }
+
+        let cat1 = new Cat("大毛", "黄色");
+        Animal.apply(cat1);
+        console.log(cat1.species);
+    </script>
+</body>
+
+</html>
