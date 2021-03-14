@@ -46,7 +46,9 @@
             //             newData[k] = [];
             //             deepCopy(newData[k], item);
             //         } else if (item instanceof Set) { //为什么直接赋值就可以了？因为Set是构造函数，构造函数创建的每个实例都是在独立的内存里，互不干扰
-            //             newData[k] = data[k];
+            //             newData[k] = item;
+            //         } else if (item instanceof Function) {
+            //             newData[k] = item;
             //         } else if (item instanceof Object) {
             //             newData[k] = {};
             //             deepCopy(newData[k], item);
@@ -58,7 +60,7 @@
             // }
             // let result = deepCopy(newData, data);
             // console.log(result);
-            // // //以下为检测是否为深拷贝部分，若更改了result内的属性，不影响data内的属性，则为深拷贝。
+            // // 以下为检测是否为深拷贝部分，若更改了result内的属性，不影响data内的属性，则为深拷贝。
             // // result.age = {};
             // // result.name = {};
             // // result.education = {};
@@ -71,13 +73,16 @@
 
         //方法二：利用JSON
 
-        let obj = JSON.parse(JSON.stringify(data));
-        let temp;
+        let obj = JSON.parse(JSON.stringify(data)); //此时，返回给obj的是一个新的内存。
         let fn; //用于找到Set构造函数
+        let Play; //用于找到play函数
+        let item;
         for (let k in data) {
             if (data[k] instanceof Set) {
-                temp = data[k];
                 fn = k;
+            } else if (data[k] instanceof Function) {
+                item = data[k];
+                Play = k;
             }
         }
         //思路：对于JSON不能拷贝的东西，手动再拷贝一次。
@@ -85,11 +90,13 @@
             if (obj[k] instanceof Array) {
                 obj[k] = data[k];
             } else if (k == fn) {
-                obj[k] = temp;
+                obj[k] = data[k];
             }
         }
+        obj[Play] = item;
+        //这样找到函数，手动再赋值的缺点，只能找到一个函数，函数多了就找不到了。
         console.log(obj);
-        // 以下用于检测方法二是否为深度拷贝
+        // // 以下用于检测方法二是否为深度拷贝
         // obj.age = {};
         // obj.name = {};
         // obj.education = {};
